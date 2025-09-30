@@ -1,4 +1,6 @@
-import clsx from "clsx";
+'use client';
+
+import clsx from 'clsx';
 
 type ErrorMessageProps = {
   pageTitle?: string;
@@ -7,7 +9,7 @@ type ErrorMessageProps = {
 };
 
 export default function ErrorMessage({
-  pageTitle = "",
+  pageTitle = '',
   contentTitle,
   content,
 }: ErrorMessageProps) {
@@ -16,15 +18,15 @@ export default function ErrorMessage({
       {pageTitle && <title>{pageTitle}</title>}
       <div
         className={clsx(
-          "min-h-[320px] bg-slate-900 text-slate-100",
-          "mb-16 p-8 rounder-xl",
-          "flex items-center justify-center",
-          "text-center"
+          'min-h-[320px] bg-slate-900 text-slate-100',
+          'mb-16 p-8 rounded-xl',
+          'flex items-center justify-center',
+          'text-center',
         )}
       >
         <div>
-          <h1 className="text-6xl/tight mb-4 font-extrabold">{contentTitle}</h1>
-          <p>{content}</p>
+          <h1 className='text-7xl/tight mb-4 font-extrabold'>{contentTitle}</h1>
+          <div>{content}</div>
         </div>
       </div>
     </>

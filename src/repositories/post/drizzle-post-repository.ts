@@ -1,15 +1,15 @@
-import { PostModel } from "@/models/post-model";
-import { PostRepository } from "./post-repository";
-import { drizzleDb } from "@/db/drizzle";
-import { logColor } from "@/utils/log-color";
-import { asyncDelay } from "@/utils/async-delay";
-import { postsTable } from "@/db/drizzle/schema";
+import { PostModel } from '@/models/post/post-model';
+import { PostRepository } from './post-repository';
+import { drizzleDb } from '@/db/drizzle';
+import { asyncDelay } from '@/utils/async-delay';
+import { postsTable } from '@/db/drizzle/schemas';
+import { eq } from 'drizzle-orm';
 
-const simulateWaitInMs = Number(process.env.SIMULATE_WAIT_IN_MS) || 0;
+const simulateWaitMs = Number(process.env.SIMULATE_WAIT_IN_MS) || 0;
 
 export class DrizzlePostRepository implements PostRepository {
   async findAllPublic(): Promise<PostModel[]> {
-    logColor("findAllPublic", Date.now());
+    await asyncDelay(simulateWaitMs, true);
 
     const posts = await drizzleDb.query.posts.findMany({
       orderBy: (posts, { desc }) => desc(posts.createdAt),
@@ -20,22 +20,20 @@ export class DrizzlePostRepository implements PostRepository {
   }
 
   async findBySlugPublic(slug: string): Promise<PostModel> {
-    await asyncDelay(simulateWaitInMs, true);
-    logColor("findBySlugPublic", Date.now());
+    await asyncDelay(simulateWaitMs, true);
 
     const post = await drizzleDb.query.posts.findFirst({
       where: (posts, { eq, and }) =>
         and(eq(posts.published, true), eq(posts.slug, slug)),
     });
 
-    if (!post) throw new Error("Post não encontrado para slug");
+    if (!post) throw new Error('Post não encontrado para slug');
 
     return post;
   }
 
   async findAll(): Promise<PostModel[]> {
-    await asyncDelay(simulateWaitInMs, true);
-    logColor("findAll", Date.now());
+    await asyncDelay(simulateWaitMs, true);
 
     const posts = await drizzleDb.query.posts.findMany({
       orderBy: (posts, { desc }) => desc(posts.createdAt),
@@ -45,14 +43,13 @@ export class DrizzlePostRepository implements PostRepository {
   }
 
   async findById(id: string): Promise<PostModel> {
-    await asyncDelay(simulateWaitInMs, true);
-    logColor("findById", Date.now());
+    await asyncDelay(simulateWaitMs, true);
 
     const post = await drizzleDb.query.posts.findFirst({
       where: (posts, { eq }) => eq(posts.id, id),
     });
 
-    if (!post) throw new Error("Post não encontrado para ID");
+    if (!post) throw new Error('Post não encontrado para ID');
 
     return post;
   }
@@ -60,12 +57,12 @@ export class DrizzlePostRepository implements PostRepository {
   async create(post: PostModel): Promise<PostModel> {
     const postExists = await drizzleDb.query.posts.findFirst({
       where: (posts, { or, eq }) =>
-        or(eq(posts.id, post.id).eq(posts.slug, post.slug)),
+        or(eq(posts.id, post.id), eq(posts.slug, post.slug)),
       columns: { id: true },
     });
 
-    if (postExists) {
-      throw new Error("Post com ID ou Slug já existe na base de dados.");
+    if (!!postExists) {
+      throw new Error('Post com ID ou Slug já existe na base de dados');
     }
 
     await drizzleDb.insert(postsTable).values(post);
@@ -78,7 +75,7 @@ export class DrizzlePostRepository implements PostRepository {
     });
 
     if (!post) {
-      throw new Error("Post não existe");
+      throw new Error('Post não existe');
     }
 
     await drizzleDb.delete(postsTable).where(eq(postsTable.id, id));
@@ -88,14 +85,14 @@ export class DrizzlePostRepository implements PostRepository {
 
   async update(
     id: string,
-    newPostData: Omit<PostModel, "id" | "slug" | "createdAt" | "updatedAt">
+    newPostData: Omit<PostModel, 'id' | 'slug' | 'createdAt' | 'updatedAt'>,
   ): Promise<PostModel> {
     const oldPost = await drizzleDb.query.posts.findFirst({
       where: (posts, { eq }) => eq(posts.id, id),
     });
 
     if (!oldPost) {
-      throw new Error("Post não existe");
+      throw new Error('Post não existe');
     }
 
     const updatedAt = new Date().toISOString();

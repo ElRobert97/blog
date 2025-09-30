@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import dynamic from "next/dynamic";
-import { useId } from "react";
-import rehypeSanitize from "rehype-sanitize";
-import remarkGfm from "remark-gfm";
+import dynamic from 'next/dynamic';
+import { useId } from 'react';
+import rehypeSanitize from 'rehype-sanitize';
+import remarkGfm from 'remark-gfm';
 
-const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
+const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
   ssr: false,
 });
 
@@ -18,7 +18,7 @@ type MarkdownEditorProps = {
 };
 
 export function MarkdownEditor({
-  labelText = "",
+  labelText = '',
   value,
   setValue,
   textAreaName,
@@ -27,23 +27,23 @@ export function MarkdownEditor({
   const id = useId();
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className='flex flex-col gap-2'>
       {labelText && (
-        <label className="text-sm" htmlFor={id}>
+        <label className='text-sm' htmlFor={id}>
           {labelText}
         </label>
       )}
 
       <MDEditor
-        className="whitespace-pre-wrap"
+        className='whitespace-pre-wrap'
         value={value}
-        onChange={(value) => {
+        onChange={value => {
           if (value === undefined) return;
           setValue(value);
         }}
         height={400}
         extraCommands={[]}
-        preview="edit"
+        preview='edit'
         hideToolbar={disabled}
         textareaProps={{
           id,
