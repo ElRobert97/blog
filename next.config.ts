@@ -17,6 +17,13 @@ const nextConfig: NextConfig = {
         pathname: '/**',
         search: '',
       },
+      {
+        protocol: 'https',
+        hostname: 'theblog.eliasrobert.site',
+        port: '',
+        pathname: '/**',
+        search: '',
+      },
     ],
   },
 };
