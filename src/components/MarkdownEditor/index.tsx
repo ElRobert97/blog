@@ -36,6 +36,7 @@ export function MarkdownEditor({
 
       <MDEditor
         className='whitespace-pre-wrap'
+        data-color-mode='light'
         value={value}
         onChange={value => {
           if (value === undefined) return;

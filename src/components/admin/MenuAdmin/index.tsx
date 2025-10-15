@@ -84,6 +84,11 @@ export function MenuAdmin() {
         Posts
       </Link>
 
+      <Link className={linkClasses} href='/admin/user'>
+        <FileTextIcon />
+        Seus Dados
+      </Link>
+
       <Link className={linkClasses} href='/admin/post/new'>
         <PlusIcon />
         Criar post

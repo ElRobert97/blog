@@ -41,7 +41,7 @@ export async function createUserAction(
     };
   }
 
-  const createResponse = await apiRequest<PublicUserDto>('/user', {
+  const createResponse = await apiRequest<PublicUserDto>('/users', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
